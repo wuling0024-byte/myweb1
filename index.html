@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>毛孩的田園日常 | 寵物生活紀錄</title>
+    <!-- Google Fonts 引入清新自然風格字型 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap"
+        rel="stylesheet">
+    <!-- FontAwesome 圖示 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --bg-color: #F8F6F0;
+            /* 暖米白色草紙質感背景 */
+            --card-bg: #FFFFFF;
+            /* 卡片底色 */
+            --primary-sage: #7A9A60;
+            /* 鼠尾草綠 */
+            --sage-light: #ECEFE6;
+            /* 淺鼠尾草綠 */
+            --sage-hover: #62804A;
+            /* 深橄欖綠 */
+            --earth-brown: #9E816A;
+            /* 大地溫暖棕 */
+            --earth-light: #F4EFEA;
+            /* 淺陶土米色 */
+            --text-main: #383632;
+            /* 深木色字體 */
+            --text-muted: #7C7871;
+            /* 柔和灰色字體 */
+            --border-color: #E5E0D8;
+            /* 溫暖邊框色 */
+            --card-radius: 20px;
+            /* 圓潤卡片弧度 */
+            --transition-speed: 0.35s;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Plus Jakarta Sans', 'Noto Serif TC', serif;
+            letter-spacing: 0.03em;
+            line-height: 1.7;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background-image: radial-gradient(#D8D2C6 0.75px, transparent 0.75px);
+            background-size: 24px 24px;
+        }
+
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background-color: rgba(248, 246, 240, 0.92);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .header-container {
+            max-width: 1080px;
+            margin: 0 auto;
+            padding: 16px 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            align-items: center;
+        }
+
+        @media (min-width: 768px) {
+            .header-container {
+                flex-direction: row;
+                justify-content: space-between;
+            }
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            text-decoration: none;
+            color: var(--text-main);
+        }
+
+        .logo-badge {
+            width: 44px;
+            height: 44px;
+            background-color: var(--sage-light);
+            color: var(--primary-sage);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            border: 1px solid rgba(122, 154, 96, 0.25);
+            transition: transform var(--transition-speed);
+        }
+
+        .logo:hover .logo-badge {
+            transform: rotate(12deg) scale(1.08);
+            background-color: var(--primary-sage);
+            color: #FFFFFF;
+        }
+
+        .logo-title h1 {
+            font-family: 'Noto Serif TC', serif;
+            font-size: 20px;
+            font-weight: 600;
+            line-height: 1.2;
+        }
+
+        .logo-title p {
+            font-size: 11px;
+            color: var(--earth-brown);
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+        }
+
+        nav {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .nav-btn {
+            background: none;
+            border: 1px solid transparent;
+            color: var(--text-muted);
+            padding: 8px 18px;
+            border-radius: 30px;
+            font-size: 14px;
+            font-family: 'Plus Jakarta Sans', 'Noto Serif TC', sans-serif;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all var(--transition-speed);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .nav-btn:hover {
+            color: var(--primary-sage);
+            background-color: var(--sage-light);
+        }
+
+        .nav-btn.active {
+            background-color: var(--card-bg);
+            color: var(--primary-sage);
+            border-color: var(--border-color);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+            font-weight: 600;
+        }
+
+        main {
+            flex: 1;
+            max-width: 1080px;
+            width: 100%;
+            margin: 32px auto;
+            padding: 0 24px;
+        }
+
+        .page {
+            display: none;
+            opacity: 0;
+            transform: translateY(12px);
+            transition: opacity 0.4s ease, transform 0.4s ease;
+        }
+
+        .page.active {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .section-header {
+            margin-bottom: 28px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 16px;
+        }
+
+        .section-sub {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--earth-brown);
+            font-weight: 600;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .section-title {
+            font-family: 'Noto Serif TC', serif;
+            font-size: 26px;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        .hero-banner {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: var(--card-radius);
+            padding: 36px;
+            text-align: center;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.02);
+            margin-bottom: 36px;
+        }
+
+        .hero-banner h2 {
+            font-family: 'Noto Serif TC', serif;
+            font-size: 28px;
+            color: var(--text-main);
+            margin-bottom: 10px;
+        }
+
+        .hero-banner p {
+            color: var(--text-muted);
+            font-size: 15px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* 兩個寵物介紹框架 */
+        .pets-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 32px;
+        }
+
+        @media (min-width: 768px) {
+            .pets-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .pet-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: var(--card-radius);
+            overflow: hidden;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.03);
+            transition: transform var(--transition-speed);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .pet-card:hover {
+            transform: translateY(-6px);
+        }
+
+        .pet-img-box {
+            position: relative;
+            width: 100%;
+            height: 280px;
+            background-color: var(--sage-light);
+            overflow: hidden;
+        }
+
+        .pet-img-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s ease;
+        }
+
+        .pet-card:hover .pet-img-box img {
+            transform: scale(1.05);
+        }
+
+        .pet-tag {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background-color: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(4px);
+            color: var(--primary-sage);
+            font-size: 12px;
+            font-weight: 600;
+            padding: 4px 12px;
+            border-radius: 20px;
+            border: 1px solid var(--border-color);
+        }
+
+        .pet-content {
+            padding: 28px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            flex: 1;
+        }
+
+        .pet-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            border-bottom: 1px dashed var(--border-color);
+            padding-bottom: 12px;
+        }
+
+        .pet-name {
+            font-family: 'Noto Serif TC', serif;
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        .pet-breed {
+            font-size: 13px;
+            color: var(--earth-brown);
+            font-weight: 500;
+        }
+
+        .pet-info-list {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            font-size: 13px;
+        }
+
+        .info-item {
+            background-color: var(--earth-light);
+            padding: 8px 12px;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .info-label {
+            font-size: 10px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+
+        .info-val {
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        .pet-desc {
+            font-size: 14px;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        .video-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 28px;
+        }
+
+        @media (min-width: 768px) {
+            .video-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .video-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: var(--card-radius);
+            overflow: hidden;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.02);
+        }
+
+        .video-placeholder {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            background-color: var(--sage-light);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-sage);
+            gap: 12px;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .video-placeholder i {
+            font-size: 44px;
+            transition: transform var(--transition-speed);
+        }
+
+        .video-placeholder:hover i {
+            transform: scale(1.15);
+        }
+
+        .video-info {
+            padding: 20px;
+        }
+
+        .video-date {
+            font-size: 11px;
+            color: var(--earth-brown);
+            font-weight: 600;
+        }
+
+        .video-title {
+            font-family: 'Noto Serif TC', serif;
+            font-size: 18px;
+            font-weight: 600;
+            margin: 4px 0 8px 0;
+        }
+
+        .video-desc {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .photo-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 20px;
+        }
+
+        .photo-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: var(--card-radius);
+            padding: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+            transition: transform var(--transition-speed);
+        }
+
+        .photo-card:hover {
+            transform: translateY(-4px) rotate(1deg);
+        }
+
+        .photo-img-box {
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            border-radius: 12px;
+            overflow: hidden;
+            background-color: var(--earth-light);
+        }
+
+        .photo-img-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .photo-caption {
+            margin-top: 10px;
+            font-size: 13px;
+            color: var(--text-main);
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .timeline {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            position: relative;
+            padding-left: 20px;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 10px;
+            bottom: 10px;
+            width: 3px;
+            background-color: var(--sage-light);
+            border-radius: 2px;
+        }
+
+        .timeline-item {
+            position: relative;
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: var(--card-radius);
+            padding: 24px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -27px;
+            top: 28px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: var(--primary-sage);
+            border: 3px solid var(--bg-color);
+        }
+
+        .timeline-date {
+            display: inline-block;
+            background-color: var(--earth-light);
+            color: var(--earth-brown);
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .timeline-title {
+            font-family: 'Noto Serif TC', serif;
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-main);
+            margin-bottom: 6px;
+        }
+
+        .timeline-desc {
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        footer {
+            background-color: var(--card-bg);
+            border-top: 1px solid var(--border-color);
+            padding: 24px;
+            margin-top: 60px;
+            text-align: center;
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <div class="header-container">
+            <div class="logo" onclick="showPage('home')">
+                <div class="logo-badge">
+                    <i class="fa-solid fa-paw"></i>
+                </div>
+                <div class="logo-title">
+                    <h1>毛孩田園記事</h1>
+                    <p>Our Country Pet Journal</p>
+                </div>
+            </div>
+
+            <!-- 上方導覽列: 依序為 首頁, 紀錄影片, 日常照片, 紀念日 -->
+            <nav>
+                <button id="btn-home" class="nav-btn active" onclick="showPage('home')">
+                    <i class="fa-solid fa-house"></i> 首頁
+                </button>
+                <button id="btn-videos" class="nav-btn" onclick="showPage('videos')">
+                    <i class="fa-solid fa-video"></i> 紀錄影片
+                </button>
+                <button id="btn-photos" class="nav-btn" onclick="showPage('photos')">
+                    <i class="fa-solid fa-image"></i> 日常照片
+                </button>
+                <button id="btn-anniversary" class="nav-btn" onclick="showPage('anniversary')">
+                    <i class="fa-solid fa-calendar-heart"></i> 紀念日
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section id="page-home" class="page active">
+            <div class="hero-banner">
+                <h2>歡迎來到我們的田園秘密基地 🌿</h2>
+                <p>這裡紀錄了家裡兩隻寶貝的日常點滴、搞笑瞬間與溫暖陪伴。邀請你一起感受牠們純粹美好的生活吧！</p>
+            </div>
+
+            <div class="section-header">
+                <span class="section-sub">Family Members</span>
+                <h3 class="section-title">寵物成員介紹</h3>
+            </div>
+
+            <!-- 首頁：兩個介紹寵物的框架 -->
+            <div class="pets-container">
+                <!-- 寵物 1 框架 -->
+                <div class="pet-card">
+                    <div class="pet-img-box">
+                        <span class="pet-tag">哥哥 / 狗狗</span>
+                        <img src="./img/IMG_5776.JPG">
+                    </div>
+                    <div class="pet-content">
+                        <div class="pet-header">
+                            <span class="pet-name">維士比</span>
+                            <span class="pet-breed">柴犬</span>
+                        </div>
+                        <div class="pet-info-list">
+                            <div class="info-item">
+                                <span class="info-label">年齡</span>
+                                <span class="info-val">9 歲</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">個性</span>
+                                <span class="info-val">傲嬌、喜歡自己獨處</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">最愛美食</span>
+                                <span class="info-val">雞肉乾</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">專長</span>
+                                <span class="info-val">睡覺, 愛出門</span>
+                            </div>
+                        </div>
+                        <p class="pet-desc">
+                            家裡的淡定大哥哥，每天最喜歡坐在自己的床觀察大家。雖然平時看起來酷酷的，但只要到了晚上就會主動走到樓梯等我們抱上去睡。
+                        </p>
+                    </div>
+                </div>
+
+                <!-- 寵物 2 框架 -->
+                <div class="pet-card">
+                    <div class="pet-img-box">
+                        <span class="pet-tag">弟弟 / 兔兔</span>
+                        <img src="./img/IMG_5589.jpg">
+                    </div>
+                    <div class="pet-content">
+                        <div class="pet-header">
+                            <span class="pet-name">吳蛋德 (Robbit)</span>
+                            <span class="pet-breed">彼得兔</span>
+                        </div>
+                        <div class="pet-info-list">
+                            <div class="info-item">
+                                <span class="info-label">年齡</span>
+                                <span class="info-val">5歲</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">個性</span>
+                                <span class="info-val">活潑、好奇心強, 愛吃</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">最愛美食</span>
+                                <span class="info-val">牛蒡 甜的西瓜,草莓,香蕉</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">專長</span>
+                                <span class="info-val">咬拖鞋,咬主人的腳</span>
+                            </div>
+                        </div>
+                        <p class="pet-desc">
+                            充滿活力的小可愛！喜歡在家裡地上開心地奔跑，每天只要看到主人拿零食就會高興地饒圈圈，是全家人的開心果。
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="page-videos" class="page">
+            <div class="section-header">
+                <span class="section-sub">Video Moments</span>
+                <h2 class="section-title">生活紀錄影片</h2>
+            </div>
+
+            <div class="video-grid">
+                <div class="video-card">
+                    <div class="video-placeholder">
+                        <!-- <i class="fa-regular fa-circle-play"></i> -->
+                        <!-- <span>點擊播放田園散步影片</span> -->
+                        <a href="https://www.youtube.com/watch?v=XOtoTdbTzpA">
+                            <img src="./img/dog1.png" alt="" style="width: 100%; height: 100%;">
+                        </a>
+                    </div>
+                    <div class="video-info">
+                        <span class="video-date">2026.04.12</span>
+                        <h3 class="video-title">維士比在草地上的春季大奔跑 🏃‍♂️</h3>
+                        <p class="video-desc">帶維士比去郊外公園，第一次看到大草皮嗨到不行瘋狂奔跑！</p>
+                    </div>
+                </div>
+
+                <div class="video-card">
+                    <div class="video-placeholder">
+                        <!-- <i class="fa-regular fa-circle-play"></i> -->
+                        <!-- <span>點擊播放下午茶時間影片</span> -->
+                        <a href="https://www.youtube.com/watch?v=BwsXxiGOGPE">
+                            <img src="./img/r2.png" alt="" style="width: 100%; height: 100%;">
+                        </a>
+                    </div>
+                    <div class="video-info">
+                        <span class="video-date">2026.03.20</span>
+                        <h3 class="video-title">吳蛋德的彩虹橋生活 🍰</h3>
+                        <p class="video-desc">吳蛋德可以自在饒圈圈 盡情奔跑。 </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="page-photos" class="page">
+            <div class="section-header">
+                <span class="section-sub">Photo Gallery</span>
+                <h2 class="section-title">日常照片牆</h2>
+            </div>
+
+            <div class="photo-gallery">
+                <div class="photo-card">
+                    <div class="photo-img-box">
+                        <img src="img/IMG_3760.jpg">
+                    </div>
+                    <p class="photo-caption">沙發上睡眼朦朧 ☀️</p>
+                </div>
+
+                <div class="photo-card">
+                    <div class="photo-img-box">
+                        <img src="img/IMG_3795.jpg">
+                    </div>
+                    <p class="photo-caption">剪指甲時的卒仔 🌸</p>
+                </div>
+
+                <div class="photo-card">
+                    <div class="photo-img-box">
+                        <img src="img/IMG_3965.jpg">
+                    </div>
+                    <p class="photo-caption">剛回來家裡的可愛小孩 📦</p>
+                </div>
+
+                <div class="photo-card">
+                    <div class="photo-img-box">
+                        <img src="img/IMG_5776.JPG">
+                    </div>
+                    <p class="photo-caption">帥氣的大哥 🌼</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="page-anniversary" class="page">
+            <div class="section-header">
+                <span class="section-sub">Special Days</span>
+                <h2 class="section-title">重要紀念日</h2>
+            </div>
+
+            <div class="timeline">
+                <div class="timeline-item">
+                    <span class="timeline-date">2019年 03 月 19 日</span>
+                    <h3 class="timeline-title">維士比來到我們家 🐱</h3>
+                    <p class="timeline-desc">在一個寒冷但心裡是溫暖的冬天早上，我們去苗栗把領養柴犬接回家，展開了第一天的毛孩生活。</p>
+                </div>
+
+                <div class="timeline-item">
+                    <span class="timeline-date">2022 年 09 月 13 日</span>
+                    <h3 class="timeline-title">吳蛋得正式加入家庭 🐶</h3>
+                    <p class="timeline-desc">在家裡附近的草園了調皮可愛的吳蛋得，家裡從此變得無比熱鬧充滿歡笑聲。</p>
+                </div>
+
+                <div class="timeline-item">
+                    <span class="timeline-date">每年 3 月 19 日</span>
+                    <h3 class="timeline-title">維士比的牛肉狂歡派對 🎂</h3>
+                    <p class="timeline-desc">每年這天都會特別幫維士比準備狗狗專用牛肉大餐！</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>© 2026 毛孩田園記事 | Crafted with Love & Natural Pastoral Style 🌿</p>
+    </footer>
+
+    <script>
+        function showPage(pageId) {
+            // 隱藏所有分頁
+            const pages = document.querySelectorAll('.page');
+            pages.forEach(p => p.classList.remove('active'));
+
+            // 取消所有導覽按鈕的高亮
+            const navBtns = document.querySelectorAll('.nav-btn');
+            navBtns.forEach(b => b.classList.remove('active'));
+
+            // 顯示目標分頁
+            const targetPage = document.getElementById('page-' + pageId);
+            if (targetPage) {
+                targetPage.classList.add('active');
+            }
+
+            // 設定當前按鈕高亮
+            const targetBtn = document.getElementById('btn-' + pageId);
+            if (targetBtn) {
+                targetBtn.classList.add('active');
+            }
+
+            // 滾動回頂部
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    </script>
+</body>
+
+</html>
